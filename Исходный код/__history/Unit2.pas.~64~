@@ -1,0 +1,154 @@
+﻿Unit Unit2;
+
+Interface
+
+Uses
+    Winapi.Windows,
+    Winapi.Messages,
+    System.SysUtils,
+    System.Variants,
+    System.Classes,
+    Vcl.Graphics,
+    Vcl.Controls,
+    Vcl.Forms,
+    Vcl.Dialogs,
+    Vcl.StdCtrls,
+    Vcl.ExtDlgs,
+    Vcl.Menus,
+    Unit3,
+    Unit4;
+
+Type
+    TForm2 = Class(TForm)
+        Memo1: TMemo;
+        Edit1: TEdit;
+        EncrypButton: TButton;
+        MemoResult: TMemo;
+        DecreepButton: TButton;
+        Label1: TLabel;
+        Label2: TLabel;
+        Label3: TLabel;
+        MainMenu: TMainMenu;
+        File1: TMenuItem;
+        Open1: TMenuItem;
+        Open2: TMenuItem;
+        OpenTextFileDialog: TOpenTextFileDialog;
+        SaveTextFileDialog: TSaveTextFileDialog;
+        NameLabel: TLabel;
+        Procedure EncrypButtonClick(Sender: TObject);
+        Procedure EditOnChange(Sender: TObject);
+        Procedure DecreepButtonClick(Sender: TObject);
+    Private
+        { Private declarations }
+    Public
+        { Public declarations }
+    End;
+
+Var
+    Form2: TForm2;
+
+Implementation
+
+Uses
+    Unit1;
+
+{$R *.dfm}
+
+Function ParseString(Memo: TMemo): String;
+Var
+    I: Integer;
+Begin
+    Result := '';
+    For I := 1 To Length(Memo.Text) Do
+    Begin
+        If MainForm.DetimationMethod Then
+        Begin
+            If Memo.Text[I] In ['A' .. 'Z', 'a' .. 'z', ' ', #13, #10, #9] Then
+                Result := Result + Memo.Text[I];
+        End
+        Else
+        Begin
+            If Check(Memo.Text[I], LOWER) Or Check(Memo.Text[I], UPPER) Or (Memo.Text[I] In [' ', #13, #10, #9]) Then
+                Result := Result + Memo.Text[I];
+        End;
+    End;
+End;
+
+Function ParseKey(Edit: TEdit): String;
+Var
+    I: Integer;
+    InputString: String;
+Begin
+    Result := '';
+    InputString := Edit.Text;
+    For I := 1 To Length(InputString) Do
+    Begin
+        IF MainForm.DetimationMethod Then
+        Begin
+            If InputString[I] In ['0' .. '9'] Then
+                Result := Result + InputString[I];
+        End
+        Else
+        Begin
+            If Check(InputString[I], LOWER) Or Check(InputString[I], UPPER) Then
+                Result := Result + UpCase(InputString[I]);
+
+        End;
+    End;
+End;
+
+Procedure TForm2.DecreepButtonClick(Sender: TObject);
+Var
+    Key, Str: String;
+Begin
+    Key := ParseKey(Edit1);
+    Str := ParseString(Memo1);
+    MemoResult.Lines.Clear;
+    If MainForm.DetimationMethod Then
+    Begin
+        If (Key <> '') And AreCoprime(StrToInt(Key), 26) Then
+            MemoResult.Text := DetimationDecryption(Str, Key);
+    End
+    Else
+    Begin
+        If Key <> '' Then
+            MemoResult.Text := VigenereDecrypt(Str, Key);
+    End;
+End;
+
+Procedure TForm2.EditOnChange(Sender: TObject);
+Begin
+    MemoResult.Lines.Clear;
+    If (Memo1.Text = '') Or (Edit1.Text = '') Then
+    Begin
+        EncrypButton.Enabled := False;
+        DecreepButton.Enabled := False;
+    End
+    Else
+    Begin
+        EncrypButton.Enabled := True;
+        DecreepButton.Enabled := True;
+    End;
+End;
+
+Procedure TForm2.EncrypButtonClick(Sender: TObject);
+Var
+    Key, Str: String;
+Begin
+    Key := ParseKey(Edit1);
+    Str := ParseString(Memo1);
+    MemoResult.Lines.Clear;
+    If MainForm.DetimationMethod Then
+    Begin
+        If (Key <> '') And AreCoprime(StrToInt(Key), 26) Then
+            MemoResult.Text := DetimationEncryption(Str, Key);
+    End
+    Else
+    Begin
+        If Key <> '' Then
+            MemoResult.Text := VigenereEncrypt(Str, Key);
+    End;
+
+End;
+
+End.

@@ -1,0 +1,104 @@
+﻿Unit Unit4;
+
+Interface
+
+Function VigenereEncrypt(Const Str, KeyStr: String): String;
+Function VigenereDecrypt(Const Str, Key: String): String;
+Function NormalizeKey(Const Key: String): String;
+Function Check(C: Char; Str: String): Boolean;
+
+Implementation
+
+Uses
+    System.SysUtils;
+
+Const
+    LOWER = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+    UPPER = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
+    N = 33;
+
+Function NormalizeKey(Const Key: String): String;
+Var
+    I: Integer;
+Begin
+    Result := '';
+    For I := 1 To Length(Key) Do
+        If Check(Key[I], LOWER) Or Check(Key[I], UPPER) Then
+            Result := Result + UpCase(Key[I]);
+End;
+
+Function Check(C: Char; Str: String): Boolean;
+Begin
+    Result := Pos(C, Str) > 0;
+End;
+
+Function CharIndex(C: Char; Const Alphabet: String): Integer;
+Begin
+    Result := Pos(C, Alphabet) - 1;
+End;
+
+Function VigenereEncrypt(Const Str, KeyStr: String): String;
+Var
+    I, J, P, K: Integer;
+    Key: String;
+Begin
+    Result := Str;
+    Key := NormalizeKey(KeyStr);
+    J := 1;
+
+    For I := 1 To Length(Result) Do
+    Begin
+        If Check(Result[I], UPPER) Then
+        Begin
+            P := CharIndex(Result[I], UPPER);
+            K := CharIndex(Key[J], UPPER);
+            Result[I] := UPPER[(P + K) Mod N + 1];
+        End
+        Else
+            If Check(Result[I], LOWER) Then
+            Begin
+                P := CharIndex(Result[I], LOWER);
+                K := CharIndex(Key[J], UPPER);
+                Result[I] := LOWER[(P + K) Mod N + 1];
+            End
+            Else
+                Continue;
+
+        Inc(J);
+        If J > Length(Key) Then
+            J := 1;
+    End;
+End;
+
+Function VigenereDecrypt(Const Str, Key: String): String;
+Var
+    I, J, C, K: Integer;
+Begin
+    Result := Str;
+    J := 1;
+
+    For I := 1 To Length(Str) Do
+    Begin
+        If Check(Result[I], UPPER) Then
+        Begin
+            C := CharIndex(Str[I], UPPER);
+            K := CharIndex(Key[J], UPPER);
+            Result[I] := UPPER[(C - K + N) Mod N + 1];
+        End
+        Else
+            If Check(Result[I], LOWER) Then
+            Begin
+                C := CharIndex(Str[I], LOWER);
+                K := CharIndex(Key[J], UPPER);
+                Result[I] := LOWER[(C - K + N) Mod N + 1];
+            End
+            Else
+                Continue;
+
+        Inc(J);
+        If J > Length(Key) Then
+            J := 1;
+    End;
+End;
+
+End.
