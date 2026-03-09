@@ -1,0 +1,83 @@
+﻿Unit Files;
+
+Interface
+
+Uses System.SysUtils;
+
+Type
+    ByteArr = Array Of Byte;
+    BitsArr = Array Of Integer;
+
+Function GetFileSize(Const FileName: String): Int64;
+Function ConvertFileToBytes(Const FileName: String): ByteArr;
+Function BytesToBits(Const Arr: ByteArr): string;
+
+Implementation
+
+Function GetFileSize(Const FileName: String): Int64;
+Var
+    F: File Of Byte;
+Begin
+    AssignFile(F, FileName);
+    Reset(F);
+    Result := FileSize(F);
+    CloseFile(F);
+End;
+
+Function ConvertFileToBytes(Const FileName: String): ByteArr;
+Var
+    F: File Of Byte;
+    Len: Int64;
+Begin
+    AssignFile(F, FileName);
+    Reset(F);
+    Len := FileSize(F);
+    SetLength(Result, Len);
+    If Len > 0 Then
+        BlockRead(F, Result[0], Len);
+    CloseFile(F);
+End;
+
+Function BytesToBits(Const Arr: ByteArr): string;
+Var
+    I, J, Idx: Integer;
+    B: Byte;
+Begin
+    SetLength(Result, Length(Arr) * 8);
+    Idx := 1;
+    For I := 0 To High(Arr) Do
+    Begin
+        B := Arr[I];
+        For J := 7 Downto 0 Do
+        Begin
+            Result[Idx] := Char(Ord('0') + ((B Shr J) And 1));
+            Inc(Idx);
+        End;
+    End;
+End;
+
+Function BitsToBytes(Bits: String): ByteArr;
+Var
+    I, J, ByteIndex, BitVal: Integer;
+    Temp: Byte;
+Begin
+    SetLength(Result, Length(Bits) Div 8);
+    ByteIndex := 0;
+    I := 1;
+    While I <= Length(Bits) Do
+    Begin
+        Temp := 0;
+        For J := 0 To 7 Do
+        Begin
+            If Bits[I + J] = '1' Then
+                Temp := Temp Or (1 Shl (7 - J))
+            Else If Bits[I + J] <> '0' Then
+                Raise Exception.Create('Недопустимый символ в строке битов');
+            Result[ByteIndex] := Temp;
+            Inc(ByteIndex);
+        I := I + 8;
+        End;
+    End;
+End;
+
+End.

@@ -1,0 +1,19 @@
+unit Registr;
+
+interface
+
+implementation
+
+Function GenirateKey(Seed: String): String;
+Var
+    Temp: Integer;
+    Current, Key: String;
+Begin
+    Key := '';
+    repeat
+
+    until seed <> current;
+
+End;
+
+end.

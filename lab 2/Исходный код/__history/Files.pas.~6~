@@ -1,0 +1,55 @@
+Unit Files;
+
+Interface
+
+Uses System.SysUtils;
+
+Type
+    ByteArr = Array Of Byte;
+    BitsArr = Array Of Integer;
+
+Function GetFileSize(Const FileName: String): Int64;
+Function ConvertFileToBytes(Const FileName: String): ByteArr;
+Function BytesToBits(Const Arr: ByteArr): string;
+
+Implementation
+
+Function GetFileSize(Const FileName: String): Int64;
+Var
+    F: File Of Byte;
+Begin
+    AssignFile(F, FileName);
+    Reset(F);
+    Result := FileSize(F);
+    CloseFile(F);
+End;
+
+Function ConvertFileToBytes(Const FileName: String): ByteArr;
+Var
+    F: File Of Byte;
+    Len: Int64;
+Begin
+    AssignFile(F, FileName);
+    Reset(F);
+    Len := FileSize(F);
+    SetLength(Result, Len);
+    If Len > 0 Then
+        BlockRead(F, Result[0], Len);
+    CloseFile(F);
+End;
+
+Function BytesToBits(Const Arr: ByteArr): string;
+Var
+    I, J, BitIndex: Integer;
+    B: Byte;
+Begin
+    Result := '';
+    For I := 0 To High(Arr) Do
+    Begin
+        B := Arr[I];
+        For J := 7 Downto 0 Do
+            Result := Result + IntToStr(((B Shr J) And 1));
+    End;
+End;
+
+End.

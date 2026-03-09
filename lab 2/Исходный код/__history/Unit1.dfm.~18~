@@ -1,0 +1,184 @@
+object MainForm: TMainForm
+  Left = 0
+  Top = 0
+  Margins.Left = 6
+  Margins.Top = 6
+  Margins.Right = 6
+  Margins.Bottom = 6
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Lab 2, Zarivniak Valeria'
+  ClientHeight = 1330
+  ClientWidth = 1681
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -24
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Menu = MainMenu
+  Position = poScreenCenter
+  PixelsPerInch = 192
+  TextHeight = 32
+  object Label1: TLabel
+    Left = 32
+    Top = 10
+    Width = 522
+    Height = 50
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    Caption = 'Text from file in binary a format:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -37
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 880
+    Top = 10
+    Width = 177
+    Height = 50
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    Caption = #1057'iphertext:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -37
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label3: TLabel
+    Left = 40
+    Top = 746
+    Width = 243
+    Height = 50
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    Caption = 'Generated key:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -37
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 32
+    Top = 998
+    Width = 242
+    Height = 50
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    Caption = 'Enter your key:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -37
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Memo1: TMemo
+    Left = 40
+    Top = 72
+    Width = 721
+    Height = 561
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 0
+  end
+  object Memo2: TMemo
+    Left = 880
+    Top = 72
+    Width = 753
+    Height = 561
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 296
+    Top = 1144
+    Width = 361
+    Height = 121
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    Caption = 'Encrypt/Decrypt'
+    TabOrder = 2
+  end
+  object KeyEdit: TEdit
+    Left = 32
+    Top = 1060
+    Width = 1593
+    Height = 40
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    TabOrder = 3
+    OnChange = EditOnChange
+  end
+  object Memo3: TMemo
+    Left = 40
+    Top = 808
+    Width = 1585
+    Height = 178
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 4
+  end
+  object Button2: TButton
+    Left = 976
+    Top = 1143
+    Width = 361
+    Height = 122
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    Caption = 'Clear'
+    TabOrder = 5
+  end
+  object MainMenu: TMainMenu
+    Left = 960
+    Top = 688
+    object File1: TMenuItem
+      Caption = 'File'
+      object File2: TMenuItem
+        Caption = 'Open'
+        OnClick = File2Click
+      end
+      object Save1: TMenuItem
+        Caption = 'Save'
+      end
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Left = 1096
+    Top = 688
+  end
+end

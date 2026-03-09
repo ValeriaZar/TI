@@ -1,0 +1,199 @@
+﻿Unit Unit1;
+
+Interface
+
+Uses
+    Winapi.Windows,
+    Winapi.Messages,
+    System.SysUtils,
+    System.Variants,
+    System.Classes,
+    Vcl.Graphics,
+    Vcl.Controls,
+    Vcl.Forms,
+    Vcl.Dialogs,
+    Vcl.Menus,
+    Vcl.StdCtrls,
+    Files,
+    Registr;
+
+Type
+    TMainForm = Class(TForm)
+        MainMenu: TMainMenu;
+        File1: TMenuItem;
+        File2: TMenuItem;
+        Save1: TMenuItem;
+        Memo1: TMemo;
+        Memo2: TMemo;
+        Button1: TButton;
+        KeyEdit: TEdit;
+        Memo3: TMemo;
+        Label1: TLabel;
+        Label2: TLabel;
+        Label3: TLabel;
+        Label4: TLabel;
+        OpenDialog: TOpenDialog;
+        Button2: TButton;
+        SaveDialog: TSaveDialog;
+        Procedure EditOnChange(Sender: TObject);
+        Procedure File2Click(Sender: TObject);
+        Procedure Button2Click(Sender: TObject);
+        Procedure Button1Click(Sender: TObject);
+        Procedure Save1Click(Sender: TObject);
+        Procedure ClearFields();
+        Procedure UpdateButtons();
+    procedure MainFormOnCreate(Sender: TObject);
+    Private
+        { Private declarations }
+        Size: Int64;
+        Key: String;
+        Text: String;
+        Seed: String;
+        Cipher: String;
+        FileExt: String;
+    Public
+        { Public declarations }
+    End;
+
+Var
+    MainForm: TMainForm;
+
+Implementation
+
+{$R *.dfm}
+
+Procedure TMainForm.ClearFields();
+Begin
+    Memo1.Lines.Text := '';
+    Memo2.Lines.Text := '';
+    Memo3.Lines.Text := '';
+    KeyEdit.Text := '';
+    Cipher := '';
+    key := '';
+    Seed := '';
+    text := '';
+End;
+
+Procedure TMainForm.UpdateButtons();
+Begin
+    if (cipher = '') or (key = '') then
+        Save1.Enabled := False
+    Else
+        Save1.Enabled := True;
+    If (Length(Seed) <> 28) And (Text = '') Then
+        Button1.Enabled := False
+    Else
+        Button1.Enabled := True;
+End;
+
+Procedure TMainForm.Button1Click(Sender: TObject);
+Var
+    Temp: String;
+Begin
+    Key := GenirateKey(Seed, Size * 8);
+    If Length(Key) > 120 Then
+    Begin
+        Temp := Copy(Key, 1, 100) + '...' + Copy(Key, Length(Key) - 3, 3);
+        Memo3.Lines.Text := Temp;
+    End
+    Else
+        Memo3.Lines.Text := Key;
+    Cipher := Algorithm(Text, Key);
+    If Size * 8 > 120 Then
+    Begin
+        Temp := Copy(Cipher, 1, 100) + '...' + Copy(Cipher, Size * 8 - 3, 3);
+        Memo2.Lines.Text := Temp;
+    End
+    Else
+        Memo2.Lines.Text := Cipher;
+    UpdateButtons();
+End;
+
+Procedure TMainForm.Button2Click(Sender: TObject);
+Begin
+    ClearFields();
+    UpdateButtons();
+End;
+
+Procedure TMainForm.EditOnChange(Sender: TObject);
+Var
+    I: Integer;
+Begin
+    Seed := KeyEdit.Text;
+    I := 1;
+    While I <= Length(Seed) Do
+    Begin
+        If Not(Seed[I] In ['0', '1']) Then
+            Delete(Seed, I, 1)
+        Else
+            Inc(I);
+    End;
+    KeyEdit.Text := Seed;
+    KeyEdit.SelStart := Length(Seed);
+    UpdateButtons();
+End;
+
+Procedure TMainForm.File2Click(Sender: TObject);
+Var
+    Temp: String;
+Begin
+    If OpenDialog.Execute() Then
+    Begin
+        ClearFields();
+        FileExt := ExtractFileExt(OpenDialog.FileName);
+        Size := GetFileSize(OpenDialog.FileName);
+        Text := BytesToBits(ConvertFileToBytes(OpenDialog.FileName));
+        If Size * 8 > 120 Then
+        Begin
+            Temp := Copy(Text, 1, 100) + '...' + Copy(Text, Size * 8 - 3, 3);
+            Memo1.Lines.Text := Temp;
+        End
+        Else
+            Memo1.Lines.Text := Text;
+    End;
+    UpdateButtons();
+End;
+
+procedure TMainForm.MainFormOnCreate(Sender: TObject);
+begin
+    ClearFields();
+    UpdateButtons();
+end;
+
+Procedure TMainForm.Save1Click(Sender: TObject);
+Var
+    EncryptedBytes, DecryptedBytes: ByteArr;
+    F: File;
+    SaveFolder: String;
+    BaseFileName: String;
+    I: Integer;
+Begin
+    EncryptedBytes := BitsToBytes(Cipher);
+    DecryptedBytes := BitsToBytes(Text);
+
+    BaseFileName := ChangeFileExt(ExtractFileName(OpenDialog.FileName), '');
+
+    SaveDialog := TSaveDialog.Create(Self);
+    SaveDialog.Title := 'Save files';
+
+    If SaveDialog.Execute Then
+    Begin
+        SaveFolder := ExtractFileDir(SaveDialog.FileName);
+
+        AssignFile(F, SaveFolder + '\' + BaseFileName + '_encrypted' + FileExt);
+        Rewrite(F, 1);
+        BlockWrite(F, EncryptedBytes[0], Length(EncryptedBytes));
+        CloseFile(F);
+
+        AssignFile(F, SaveFolder + '\' + BaseFileName + '_decrypted' + FileExt);
+        Rewrite(F, 1);
+        BlockWrite(F, DecryptedBytes[0], Length(DecryptedBytes));
+        CloseFile(F);
+
+        ShowMessage('Files are saved');
+    End;
+
+    SaveDialog.Free;
+End;
+
+End.

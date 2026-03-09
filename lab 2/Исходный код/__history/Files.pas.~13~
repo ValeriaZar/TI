@@ -1,0 +1,74 @@
+Unit Files;
+
+Interface
+
+Uses System.SysUtils;
+
+Type
+    ByteArr = Array Of Byte;
+    BitsArr = Array Of Integer;
+
+Function GetFileSize(Const FileName: String): Int64;
+Function ConvertFileToBytes(Const FileName: String): ByteArr;
+Function BytesToBits(Const Arr: ByteArr): string;
+
+Implementation
+
+Function GetFileSize(Const FileName: String): Int64;
+Var
+    F: File Of Byte;
+Begin
+    AssignFile(F, FileName);
+    Reset(F);
+    Result := FileSize(F);
+    CloseFile(F);
+End;
+
+Function ConvertFileToBytes(Const FileName: String): ByteArr;
+Var
+    F: File Of Byte;
+    Len: Int64;
+Begin
+    AssignFile(F, FileName);
+    Reset(F);
+    Len := FileSize(F);
+    SetLength(Result, Len);
+    If Len > 0 Then
+        BlockRead(F, Result[0], Len);
+    CloseFile(F);
+End;
+
+Function BytesToBits(Const Arr: ByteArr): string;
+Var
+    I, J, Idx: Integer;
+    B: Byte;
+Begin
+    SetLength(Result, Length(Arr) * 8);
+    Idx := 1;
+    For I := 0 To High(Arr) Do
+    Begin
+        B := Arr[I];
+        For J := 7 Downto 0 Do
+        Begin
+            Result[Idx] := Char(Ord('0') + ((B Shr J) And 1));
+            Inc(Idx);
+        End;
+    End;
+End;
+
+Function BitsToBytes(Bits: String): ByteArr;
+Var
+    I, J, Temp: Int64;
+Begin
+    I := 1;
+    SetLength(Result, High(Bits) Div 8);
+    While I < High(Bits) Do
+    Begin
+        For J := I To I + 7 Do
+        Begin
+
+        End;
+    End;
+End;
+
+End.

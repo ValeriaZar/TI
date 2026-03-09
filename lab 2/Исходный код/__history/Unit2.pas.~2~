@@ -1,0 +1,25 @@
+Unit Unit2;
+
+Interface
+
+Implementation
+
+Type
+
+    ByteArr = Array Of Byte;
+
+Function ConvertFileToBBytes(FileName: String): ByteArr;
+Var
+    F: File Of Byte;
+    B: Byte;
+    Arr: ByteArr;
+Begin
+    AssignFile(F, FileName);
+    Reset(F);
+    While Not Eof(F) Do
+    Begin
+        Read(F, B);
+    End;
+End;
+
+End.

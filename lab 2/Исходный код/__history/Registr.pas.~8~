@@ -1,0 +1,30 @@
+Unit Registr;
+
+Interface
+
+Uses
+    System.SysUtils;
+
+Function GenirateKey(Seed: String; BitCount: Int64): String;
+
+Implementation
+
+Function GenirateKey(Seed: String; BitCount: Int64): String;
+Var
+    Temp, I, j: Integer;
+    Current, Key: String;
+Begin
+    Key := '';
+    Current := Seed;
+    for I := 1 to BitCount do
+    Begin
+        key := key + Current[1];
+        Temp := (Ord(Current[28]) - Ord('0')) Xor (Ord(Current[3]) - Ord('0')) Xor (Ord(Current[1]) - Ord('0'));
+        For J := 1 To Length(Current) - 1 Do
+            Current[I] := Current[I + 1];
+        Current[28] := Char(Ord('0') + Temp);
+    End;
+    GenirateKey := Key;
+End;
+
+End.
