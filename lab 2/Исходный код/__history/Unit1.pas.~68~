@@ -42,6 +42,7 @@ Type
         Procedure Save1Click(Sender: TObject);
         Procedure ClearFields();
         Procedure UpdateButtons();
+        Procedure MainFormOnCreate(Sender: TObject);
     Private
         { Private declarations }
         Size: Int64;
@@ -68,18 +69,22 @@ Begin
     Memo3.Lines.Text := '';
     KeyEdit.Text := '';
     Cipher := '';
-    key := '';
+    Key := '';
     Seed := '';
-    text := '';
+    Text := '';
+    FileExt := '';
 End;
 
 Procedure TMainForm.UpdateButtons();
 Begin
-    if (cipher = '') or (key = '') then
+    If (Cipher = '') Or (Key = '') Or (Text = '') Then
         Save1.Enabled := False
     Else
         Save1.Enabled := True;
-
+    If (Length(Seed) = 28) And (Text <> '') Then
+        Button1.Enabled := True
+    Else
+        Button1.Enabled := False;
 End;
 
 Procedure TMainForm.Button1Click(Sender: TObject);
@@ -126,10 +131,7 @@ Begin
     End;
     KeyEdit.Text := Seed;
     KeyEdit.SelStart := Length(Seed);
-    If Length(Seed) <> 28 Then
-        Button1.Enabled := False
-    Else
-        Button1.Enabled := True;
+    UpdateButtons();
 End;
 
 Procedure TMainForm.File2Click(Sender: TObject);
@@ -153,6 +155,12 @@ Begin
     UpdateButtons();
 End;
 
+Procedure TMainForm.MainFormOnCreate(Sender: TObject);
+Begin
+    ClearFields();
+    UpdateButtons();
+End;
+
 Procedure TMainForm.Save1Click(Sender: TObject);
 Var
     EncryptedBytes, DecryptedBytes: ByteArr;
@@ -167,7 +175,7 @@ Begin
     BaseFileName := ChangeFileExt(ExtractFileName(OpenDialog.FileName), '');
 
     SaveDialog := TSaveDialog.Create(Self);
-    SaveDialog.Title := 'Сохранить файлы';
+    SaveDialog.Title := 'Save files';
 
     If SaveDialog.Execute Then
     Begin
@@ -183,7 +191,7 @@ Begin
         BlockWrite(F, DecryptedBytes[0], Length(DecryptedBytes));
         CloseFile(F);
 
-        ShowMessage('Файлы сохранены');
+        ShowMessage('Files are saved');
     End;
 
     SaveDialog.Free;

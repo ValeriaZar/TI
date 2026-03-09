@@ -91,7 +91,7 @@ Procedure TMainForm.Button1Click(Sender: TObject);
 Var
     Temp: String;
 Begin
-    Key := GenirateKey(Seed, Size * 8);
+    Key := GenerateKey(Seed, Size * 8);
     If Length(Key) > 120 Then
     Begin
         Temp := Copy(Key, 1, 100) + '...' + Copy(Key, Length(Key) - 3, 3);

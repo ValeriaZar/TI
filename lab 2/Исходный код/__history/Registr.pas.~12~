@@ -33,7 +33,7 @@ Var
     I: Int64;
 Begin
     Result := '';
-    For I := 1 To Length(Text) Do
+    For I := 1 To High(Text) Do
     Begin
         Result := Result + Char(Ord('0') + ( (Ord(Text[I]) - Ord('0')) xor (Ord(Key[I]) - Ord('0'))));
     End;

@@ -5,12 +5,12 @@ Interface
 Uses
     System.SysUtils;
 
-Function GenerateKey(Seed: String; BitCount: Int64): String;
+Function GenirateKey(Seed: String; BitCount: Int64): String;
 Function Algorithm(Text: String; Key: String): String;
 
 Implementation
 
-Function GenerateKey(Seed: String; BitCount: Int64): String;
+Function GenirateKey(Seed: String; BitCount: Int64): String;
 Var
     Temp, I, j: Integer;
     Current, Key: String;
@@ -25,7 +25,7 @@ Begin
             Current[J] := Current[J + 1];
         Current[28] := Char(Ord('0') + Temp);
     End;
-    GenerateKey := Key;
+    GenirateKey := Key;
 End;
 
 Function Algorithm(Text: String; Key: String): String;
@@ -33,7 +33,7 @@ Var
     I: Int64;
 Begin
     Result := '';
-    For I := 1 To Length(Text) Do
+    For I := 1 To High(Text) Do
     Begin
         Result := Result + Char(Ord('0') + ( (Ord(Text[I]) - Ord('0')) xor (Ord(Key[I]) - Ord('0'))));
     End;
