@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.843,Z:\Desktop\TI\Unit1.dfm=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.408,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.026,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.118,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.852,Z:\Desktop\TI\Unit2.dfm=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.946,=C:\Mac\Home\Desktop\TI\Unit3.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.166,=C:\Mac\Home\Desktop\TI\Unit4.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.852,Z:\Desktop\TI\Unit2.pas=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.541,Z:\Desktop\TI\Project7.dproj=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Project7.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.872,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.862,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.843,Z:\Desktop\TI\Unit1.pas=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>
