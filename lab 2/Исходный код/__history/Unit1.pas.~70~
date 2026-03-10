@@ -42,6 +42,7 @@ Type
         Procedure Save1Click(Sender: TObject);
         Procedure ClearFields();
         Procedure UpdateButtons();
+        Procedure MainFormOnCreate(Sender: TObject);
     Private
         { Private declarations }
         Size: Int64;
@@ -68,28 +69,29 @@ Begin
     Memo3.Lines.Text := '';
     KeyEdit.Text := '';
     Cipher := '';
-    key := '';
+    Key := '';
     Seed := '';
-    text := '';
+    Text := '';
+    FileExt := '';
 End;
 
 Procedure TMainForm.UpdateButtons();
 Begin
-    if (cipher = '') or (key = '') then
+    If (Cipher = '') Or (Key = '') Or (Text = '') Then
         Save1.Enabled := False
     Else
         Save1.Enabled := True;
-    If Length(Seed) <> 28 Then
-        Button1.Enabled := False
+    If (Length(Seed) = 28) And (Text <> '') Then
+        Button1.Enabled := True
     Else
-        Button1.Enabled := True;
+        Button1.Enabled := False;
 End;
 
 Procedure TMainForm.Button1Click(Sender: TObject);
 Var
     Temp: String;
 Begin
-    Key := GenirateKey(Seed, Size * 8);
+    Key := GenerateKey(Seed, Size * 8);
     If Length(Key) > 120 Then
     Begin
         Temp := Copy(Key, 1, 100) + '...' + Copy(Key, Length(Key) - 3, 3);
@@ -129,7 +131,7 @@ Begin
     End;
     KeyEdit.Text := Seed;
     KeyEdit.SelStart := Length(Seed);
-
+    UpdateButtons();
 End;
 
 Procedure TMainForm.File2Click(Sender: TObject);
@@ -153,40 +155,33 @@ Begin
     UpdateButtons();
 End;
 
-Procedure TMainForm.Save1Click(Sender: TObject);
-Var
-    EncryptedBytes, DecryptedBytes: ByteArr;
-    F: File;
-    SaveFolder: String;
-    BaseFileName: String;
-    I: Integer;
+Procedure TMainForm.MainFormOnCreate(Sender: TObject);
 Begin
-    EncryptedBytes := BitsToBytes(Cipher);
-    DecryptedBytes := BitsToBytes(Text);
+    ClearFields();
+    UpdateButtons();
+End;
 
-    BaseFileName := ChangeFileExt(ExtractFileName(OpenDialog.FileName), '');
+procedure TMainForm.Save1Click(Sender: TObject);
+Var
+    Bytes: ByteArr;
+    F: File;
+begin
+    Bytes := BitsToBytes(Cipher);
 
     SaveDialog := TSaveDialog.Create(Self);
-    SaveDialog.Title := 'Сохранить файлы';
+    SaveDialog.Title := 'Save encrypted file';
+    SaveDialog.DefaultExt := FileExt;
 
     If SaveDialog.Execute Then
     Begin
-        SaveFolder := ExtractFileDir(SaveDialog.FileName);
-
-        AssignFile(F, SaveFolder + '\' + BaseFileName + '_encrypted' + FileExt);
+        AssignFile(F, SaveDialog.FileName);
         Rewrite(F, 1);
-        BlockWrite(F, EncryptedBytes[0], Length(EncryptedBytes));
+        BlockWrite(F, Bytes[0], Length(Bytes));
         CloseFile(F);
 
-        AssignFile(F, SaveFolder + '\' + BaseFileName + '_decrypted' + FileExt);
-        Rewrite(F, 1);
-        BlockWrite(F, DecryptedBytes[0], Length(DecryptedBytes));
-        CloseFile(F);
-
-        ShowMessage('Файлы сохранены');
+        ShowMessage('File saved successfully');
     End;
 
     SaveDialog.Free;
 End;
-
 End.

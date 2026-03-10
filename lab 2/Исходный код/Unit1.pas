@@ -161,37 +161,24 @@ Begin
     UpdateButtons();
 End;
 
-Procedure TMainForm.Save1Click(Sender: TObject);
+procedure TMainForm.Save1Click(Sender: TObject);
 Var
-    EncryptedBytes, DecryptedBytes: ByteArr;
+    Bytes: ByteArr;
     F: File;
-    SaveFolder: String;
-    BaseFileName: String;
-    I: Integer;
-Begin
-    EncryptedBytes := BitsToBytes(Cipher);
-    DecryptedBytes := BitsToBytes(Text);
-
-    BaseFileName := ChangeFileExt(ExtractFileName(OpenDialog.FileName), '');
+begin
+    Bytes := BitsToBytes(Cipher);
 
     SaveDialog := TSaveDialog.Create(Self);
-    SaveDialog.Title := 'Save files';
+    SaveDialog.Title := 'Save encrypted file';
 
     If SaveDialog.Execute Then
     Begin
-        SaveFolder := ExtractFileDir(SaveDialog.FileName);
-
-        AssignFile(F, SaveFolder + '\' + BaseFileName + '_encrypted' + FileExt);
+        AssignFile(F, SaveDialog.FileName + FileExt);
         Rewrite(F, 1);
-        BlockWrite(F, EncryptedBytes[0], Length(EncryptedBytes));
+        BlockWrite(F, Bytes[0], Length(Bytes));
         CloseFile(F);
 
-        AssignFile(F, SaveFolder + '\' + BaseFileName + '_decrypted' + FileExt);
-        Rewrite(F, 1);
-        BlockWrite(F, DecryptedBytes[0], Length(DecryptedBytes));
-        CloseFile(F);
-
-        ShowMessage('Files are saved');
+        ShowMessage('File saved successfully');
     End;
 
     SaveDialog.Free;
