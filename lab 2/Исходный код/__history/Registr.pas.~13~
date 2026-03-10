@@ -20,7 +20,7 @@ Begin
     for I := 1 to BitCount do
     Begin
         key := key + Current[1];
-        Temp := (Ord(Current[26]) - Ord('0')) Xor (Ord(Current[1]) - Ord('0'));
+        Temp := (Ord(Current[28]) - Ord('0')) Xor (Ord(Current[3]) - Ord('0')) Xor (Ord(Current[1]) - Ord('0'));
         For J := 1 To Length(Current) - 1 Do
             Current[J] := Current[J + 1];
         Current[28] := Char(Ord('0') + Temp);
