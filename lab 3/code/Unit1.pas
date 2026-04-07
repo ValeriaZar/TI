@@ -1,0 +1,378 @@
+﻿Unit Unit1;
+
+Interface
+
+Uses
+    Winapi.Windows,
+    Winapi.Messages,
+    System.SysUtils,
+    System.Variants,
+    System.Classes,
+    Vcl.Graphics,
+    Vcl.Controls,
+    Vcl.Forms,
+    Vcl.Dialogs,
+    Vcl.StdCtrls,
+    Vcl.Menus,
+    System.IOUtils;
+
+Type
+    TForm1 = Class(TForm)
+        FirstEdit: TEdit;
+        SecondEdit: TEdit;
+        ThirdEdit: TEdit;
+        Label1: TLabel;
+        OpenDialog: TOpenDialog;
+        SaveDialog: TSaveDialog;
+        Label2: TLabel;
+        Label3: TLabel;
+        EncryptButton: TButton;
+        ResultMemo: TMemo;
+        DecryptButton: TButton;
+        Label4: TLabel;
+        Procedure MainFormOnCreate(Sender: TObject);
+        Procedure FirstEditOnChange(Sender: TObject);
+        Procedure SecondEditOnChange(Sender: TObject);
+        Procedure CheckButtonState();
+        Procedure ThirdEditOnChange(Sender: TObject);
+        Procedure EncryptButtonClick(Sender: TObject);
+        Procedure DecryptButtonClick(Sender: TObject);
+        Function DecryptBlock(C_val: Cardinal; P, Q, B: Int64): Byte;
+    Private
+        { Private declarations }
+        FilePath: String;
+        SaveFilePath: String;
+    Public
+        { Public declarations }
+    End;
+
+Var
+    Form1: TForm1;
+
+Implementation
+
+{$R *.dfm}
+
+Type
+    ResultArray = Array Of Integer;
+
+Function CheckModFour(Number: Integer): Boolean;
+Begin
+    Result := (Number Mod 4 = 3);
+End;
+
+Function ModPow(Base, Exp, ModN: Int64): Int64;
+Begin
+    Result := 1;
+    Base := Base Mod ModN;
+    If Base < 0 Then
+        Base := Base + ModN;
+    While Exp > 0 Do
+    Begin
+        If (Exp Mod 2) = 1 Then
+            Result := (Result * Base) Mod ModN;
+        Base := (Base * Base) Mod ModN;
+        Exp := Exp Div 2;
+    End;
+End;
+
+Function NormalizeMod(X, M: Int64): Int64;
+Begin
+    Result := X Mod M;
+    If Result < 0 Then
+        Result := Result + M;
+End;
+
+Function ModInverse(A, N: Int64): Int64;
+Var
+    T, Newt, R, Newr, Q, Temp: Int64;
+Begin
+    T := 0;
+    Newt := 1;
+    R := N;
+    Newr := A;
+    While Newr <> 0 Do
+    Begin
+        Q := R Div Newr;
+        Temp := T;
+        T := Newt;
+        Newt := Temp - Q * Newt;
+        Temp := R;
+        R := Newr;
+        Newr := Temp - Q * Newr;
+    End;
+    If R > 1 Then
+        Exit(0);
+    If T < 0 Then
+        T := T + N;
+    Result := T;
+End;
+
+Function TForm1.DecryptBlock(C_val: Cardinal; P, Q, B: Int64): Byte;
+Var
+    N, Inv2: Int64;
+    D, RootP, RootQ: Int64;
+    Yp, Yq: Int64;
+    Roots: Array [0 .. 3] Of Int64;
+    I: Integer;
+    M_candidate: Int64;
+Begin
+    N := P * Q;
+    Inv2 := ModInverse(2, N);
+
+    D := NormalizeMod((B * B) Mod N + (4 * C_val) Mod N, N);
+
+    RootP := ModPow(D, (P + 1) Div 4, P);
+    RootQ := ModPow(D, (Q + 1) Div 4, Q);
+
+    Yp := ModInverse(Q, P);
+    Yq := ModInverse(P, Q);
+
+    Roots[0] := NormalizeMod(Yp * Q * RootP + Yq * P * RootQ, N);
+    Roots[1] := N - Roots[0];
+    Roots[2] := NormalizeMod(Yp * Q * RootP - Yq * P * RootQ, N);
+    Roots[3] := N - Roots[2];
+
+    Result := 0;
+    For I := 0 To 3 Do
+    Begin
+
+        M_candidate := NormalizeMod((Roots[I] - B) * Inv2, N);
+        If (M_candidate >= 0) And (M_candidate <= 255) Then
+        Begin
+            Result := Byte(M_candidate);
+            Exit;
+        End;
+    End;
+End;
+
+Function IsPrime(Number: Integer): Boolean;
+Var
+    I: Integer;
+Begin
+    Result := True;
+    If Number < 2 Then
+        Result := False;
+    I := 2;
+    While I <= Sqrt(Number) Do
+    Begin
+        If Number Mod I = 0 Then
+        Begin
+            Result := False;
+            Break;
+        End;
+        Inc(I);
+    End;
+End;
+
+Procedure TForm1.CheckButtonState();
+Begin
+    If (FirstEdit.Text = '') Or (SecondEdit.Text = '') Or (ThirdEdit.Text = '') Then
+    Begin
+        EncryptButton.Enabled := False;
+        DecryptButton.Enabled := False;
+    End
+    Else
+        If Not(IsPrime(StrToInt(FirstEdit.Text)) And IsPrime(StrToInt(SecondEdit.Text))) Then
+        Begin
+            EncryptButton.Enabled := False;
+            DecryptButton.Enabled := False;
+        End
+        Else
+            If Not(CheckModFour(StrToInt(FirstEdit.Text)) And CheckModFour(StrToInt(SecondEdit.Text))) Then
+            Begin
+                EncryptButton.Enabled := False;
+                DecryptButton.Enabled := False;
+            End
+            Else
+                If (StrToInt(FirstEdit.Text) * StrToInt(SecondEdit.Text) < StrToInt(ThirdEdit.Text)) Then
+                Begin
+                    EncryptButton.Enabled := False;
+                    DecryptButton.Enabled := False;
+                End
+                Else
+                Begin
+                    EncryptButton.Enabled := True;
+                    DecryptButton.Enabled := True;
+                End
+End;
+
+Procedure TForm1.MainFormOnCreate(Sender: TObject);
+Begin
+    EncryptButton.Enabled := False;
+    DecryptButton.Enabled := False;
+End;
+
+Function CheckIfAllNumbers(Text: String): String;
+Var
+    I: Integer;
+Begin
+    I := 1;
+    While I <= Length(Text) Do
+    Begin
+        If Not(Text[I] In ['0' .. '9']) Then
+            Delete(Text, I, 1)
+        Else
+            Inc(I);
+    End;
+    Result := Text;
+End;
+
+Procedure TForm1.FirstEditOnChange(Sender: TObject);
+Var
+    Text: String;
+    CaretPos: Integer;
+Begin
+    CaretPos := FirstEdit.SelStart;
+    Text := FirstEdit.Text;
+
+    FirstEdit.Text := CheckIfAllNumbers(Text);
+    If CaretPos <= Length(Text) Then
+        FirstEdit.SelStart := CaretPos
+    Else
+        FirstEdit.SelStart := Length(Text);
+
+    CheckButtonState();
+End;
+
+Procedure TForm1.SecondEditOnChange(Sender: TObject);
+Var
+    Text: String;
+    CaretPos: Integer;
+Begin
+    CaretPos := SecondEdit.SelStart;
+    Text := SecondEdit.Text;
+
+    SecondEdit.Text := CheckIfAllNumbers(Text);
+    If CaretPos <= Length(Text) Then
+        SecondEdit.SelStart := CaretPos
+    Else
+        SecondEdit.SelStart := Length(Text);
+    CheckButtonState();
+End;
+
+Procedure TForm1.ThirdEditOnChange(Sender: TObject);
+Var
+    Text: String;
+    CaretPos: Integer;
+Begin
+    CaretPos := ThirdEdit.SelStart;
+    Text := ThirdEdit.Text;
+
+    ThirdEdit.Text := CheckIfAllNumbers(Text);
+    If CaretPos <= Length(Text) Then
+        ThirdEdit.SelStart := CaretPos
+    Else
+        ThirdEdit.SelStart := Length(Text);
+    CheckButtonState();
+End;
+
+Procedure SaveToFile(Res: ResultArray);
+Var
+    F: File;
+    ToSave: ResultArray;
+Begin
+    If Form1.SaveDialog.Execute Then
+    Begin
+        ToSave := Res;
+        AssignFile(F, Form1.SaveDialog.FileName);
+        Rewrite(F, 1);
+        BlockWrite(F, ToSave[0], Length(ToSave) * SizeOf(Integer));
+        CloseFile(F);
+    End;
+End;
+
+Function Encrypt(FileName, P, Q, B: String): ResultArray;
+Var
+    Bytes: TBytes;
+    I: Integer;
+    N, NumB: Int64;
+Begin
+    Bytes := TFile.ReadAllBytes(FileName);
+    SetLength(Result, Length(Bytes));
+
+    N := StrToInt64(P) * StrToInt64(Q);
+    NumB := StrToInt64(B);
+
+    For I := 0 To High(Bytes) Do
+    Begin
+        Result[I] := Integer(NormalizeMod(Int64(Bytes[I]) * (Bytes[I] + NumB), N));
+    End;
+
+    SaveToFile(Result);
+End;
+
+Procedure TForm1.DecryptButtonClick(Sender: TObject);
+Var
+    F: File;
+    EncryptedData: ResultArray;
+    DecryptedBytes: TBytes;
+    I: Integer;
+    P, Q, B: Int64;
+Begin
+    If Not OpenDialog.Execute Then
+        Exit;
+
+    P := StrToInt64(FirstEdit.Text);
+    Q := StrToInt64(SecondEdit.Text);
+    B := StrToInt64(ThirdEdit.Text);
+
+    AssignFile(F, OpenDialog.FileName);
+    Reset(F, 1);
+    SetLength(EncryptedData, FileSize(F) Div SizeOf(Integer));
+    BlockRead(F, EncryptedData[0], FileSize(F));
+    CloseFile(F);
+
+    SetLength(DecryptedBytes, Length(EncryptedData));
+
+    ResultMemo.Clear;
+
+    For I := 0 To High(EncryptedData) Do
+    Begin
+        DecryptedBytes[I] := DecryptBlock(EncryptedData[I], P, Q, B);
+        If Length(EncryptedData) > 100 Then
+        Begin
+            If I < 100 Then
+                ResultMemo.Text := ResultMemo.Text + ' ' + IntToStr(DecryptedBytes[I]);
+            If I = 100 Then
+                ResultMemo.Text := ResultMemo.Text + '...';
+        End
+        Else
+            ResultMemo.Text := ResultMemo.Text + ' ' + IntToStr(DecryptedBytes[I]);
+    End;
+
+    If SaveDialog.Execute Then
+        TFile.WriteAllBytes(SaveDialog.FileName, DecryptedBytes);
+
+    ShowMessage('Дешифрование завершено!');
+End;
+
+Procedure TForm1.EncryptButtonClick(Sender: TObject);
+Var
+    EncryptedArray: ResultArray;
+    I: Integer;
+Begin
+    ResultMemo.Clear;
+    Try
+        If Not OpenDialog.Execute Then
+            Exit;
+
+        FilePath := OpenDialog.FileName;
+        EncryptedArray := Encrypt(FilePath, FirstEdit.Text, SecondEdit.Text, ThirdEdit.Text);
+        If Length(EncryptedArray) > 100 Then
+        Begin
+            For I := 0 To 99 Do
+                ResultMemo.Text := ResultMemo.Text + ' ' + IntToStr(EncryptedArray[I]);
+            ResultMemo.Text := ResultMemo.Text + '...';
+        End
+        Else
+            For I := 0 To High(EncryptedArray) Do
+                ResultMemo.Text := ResultMemo.Text + ' ' + IntToStr(EncryptedArray[I]);
+        ShowMessage('Шифрование успешно завершено!');
+    Except
+        On E: Exception Do
+            ShowMessage('Ошибка шифрования: ' + E.Message);
+    End;
+End;
+
+End.

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899/12/30 00:00:00.000.026,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.408,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899/12/30 00:00:00.000.862,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/04/06 16:56:41.000.810,=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/04/06 16:57:20.000.998,Z:\Desktop\test\Unit1.pas=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2026/04/06 16:57:20.000.998,Z:\Desktop\test\Unit1.dfm=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2026/04/06 16:57:34.000.199,Z:\Desktop\test\Project7.dproj=C:\Mac\Home\Documents\Embarcadero\Studio\Projects\Project7.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
