@@ -1,0 +1,498 @@
+﻿Unit Unit1;
+
+Interface
+
+Uses
+    Windows,
+    Messages,
+    SysUtils,
+    Classes,
+    Graphics,
+    Controls,
+    Forms,
+    Dialogs,
+    StdCtrls,
+    ExtCtrls,
+    Vcl.ComCtrls;
+
+Type
+    TForm1 = Class(TForm)
+        PageControl: TPageControl;
+        TabSheet1: TTabSheet;
+        TabSheet2: TTabSheet;
+
+        LbP: TLabel;
+        EdP: TEdit;
+        LbQ: TLabel;
+        EdQ: TEdit;
+        LbD: TLabel;
+        EdD: TEdit;
+        BtnKeys: TButton;
+
+        LbN: TLabel;
+        EdN: TEdit;
+        LbPhi: TLabel;
+        EdPhi: TEdit;
+        LbE: TLabel;
+        EdE: TEdit;
+
+        LbMsg: TLabel;
+        EdMsg: TEdit;
+        BtnSign: TButton;
+
+        LbHash: TLabel;
+        EdHash: TEdit;
+        LbSig: TLabel;
+        EdSig: TEdit;
+        BtnSave: TButton;
+
+        LbLog: TLabel;
+        MemLog: TMemo;
+        LbFile: TLabel;
+        EdFile: TEdit;
+        BtnOpen: TButton;
+
+        LbVN: TLabel;
+        EdVN: TEdit;
+        LbVE: TLabel;
+        EdVE: TEdit;
+        BtnVerify: TButton;
+
+        LbVText: TLabel;
+        EdVText: TEdit;
+        LbVS: TLabel;
+        EdVS: TEdit;
+        LbH1: TLabel;
+        EdH1: TEdit;
+        LbH2: TLabel;
+        EdH2: TEdit;
+        LbResult: TLabel;
+        EdResult: TEdit;
+        LbVLog: TLabel;
+        MemVLog: TMemo;
+
+        DlgSave: TSaveDialog;
+        DlgOpen: TOpenDialog;
+        Button1: TButton;
+
+        Procedure FormCreate(Sender: TObject);
+        Procedure BtnKeysClick(Sender: TObject);
+        Procedure BtnSignClick(Sender: TObject);
+        Procedure BtnSaveClick(Sender: TObject);
+        Procedure BtnOpenClick(Sender: TObject);
+        Procedure BtnVerifyClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+
+    Private
+        FP, FQ, FN, FPhi, FE, FD: Int64;
+
+        Function IsPrime(N: Int64): Boolean;
+        Function GCD(A, B: Int64): Int64;
+        Function ExtGCD(A, B: Int64; Var X, Y: Int64): Int64;
+        Function ModInv(A, M: Int64): Int64;
+        Function PowMod(Base, Exp, Md: Int64): Int64;
+        Function CalcHash(Const S: String; N: Int64): Int64;
+    End;
+
+Var
+    Form1: TForm1;
+
+Implementation
+
+{$R *.dfm}
+
+Function CharToNum(C: Char): Int64;
+Begin
+    C := UpCase(C);
+
+    If (C >= 'А') And (C <= 'Я') Then
+        Result := Ord(C) - Ord('А') + 1
+    Else
+        If (C >= 'A') And (C <= 'Z') Then
+            Result := Ord(C) - Ord('A') + 1
+        Else
+            Result := 0;
+End;
+
+Function TForm1.IsPrime(N: Int64): Boolean;
+Var
+    I: Int64;
+Begin
+    Result := False;
+    If N < 2 Then
+        Exit;
+    If N = 2 Then
+    Begin
+        Result := True;
+        Exit;
+    End;
+    If (N Mod 2) = 0 Then
+        Exit;
+    I := 3;
+    While I * I <= N Do
+    Begin
+        If (N Mod I) = 0 Then
+            Exit;
+        Inc(I, 2);
+    End;
+    Result := True;
+End;
+
+Function TForm1.GCD(A, B: Int64): Int64;
+Var
+    T: Int64;
+Begin
+    While B <> 0 Do
+    Begin
+        T := B;
+        B := A Mod B;
+        A := T;
+    End;
+    Result := A;
+End;
+
+Function TForm1.ExtGCD(A, B: Int64; Var X, Y: Int64): Int64;
+Var
+    X1, Y1, Q: Int64;
+Begin
+    If B = 0 Then
+    Begin
+        X := 1;
+        Y := 0;
+        Result := A;
+        Exit;
+    End;
+    Result := ExtGCD(B, A Mod B, X1, Y1);
+    Q := A Div B;
+    X := Y1;
+    Y := X1 - Q * Y1;
+End;
+
+Function TForm1.ModInv(A, M: Int64): Int64;
+Var
+    X, Y: Int64;
+Begin
+    ExtGCD(A, M, X, Y);
+    Result := ((X Mod M) + M) Mod M;
+End;
+
+Function TForm1.PowMod(Base, Exp, Md: Int64): Int64;
+Var
+    A, Z, R: Int64;
+Begin
+    If Md = 1 Then
+    Begin
+        Result := 0;
+        Exit;
+    End;
+    A := Base Mod Md;
+    Z := Exp;
+    R := 1;
+    While Z > 0 Do
+    Begin
+        While (Z Mod 2) = 0 Do
+        Begin
+            Z := Z Div 2;
+            A := (A * A) Mod Md;
+        End;
+        Z := Z - 1;
+        R := (R * A) Mod Md;
+    End;
+    Result := R;
+End;
+
+Function TForm1.CalcHash(Const S: String; N: Int64): Int64;
+Var
+    I: Integer;
+    H, M: Int64;
+Begin
+    H := 100;
+
+    For I := 1 To Length(S) Do
+    Begin
+        M := CharToNum(S[I]);
+        H := ((H + M) * (H + M)) Mod N;
+    End;
+
+    Result := H;
+End;
+
+Procedure TForm1.FormCreate(Sender: TObject);
+Begin
+    Caption := 'ЭЦП RSA';
+    FP := 0;
+    FQ := 0;
+    FN := 0;
+    FPhi := 0;
+    FE := 0;
+    FD := 0;
+End;
+
+Procedure TForm1.BtnKeysClick(Sender: TObject);
+Var
+    P, Q, D, N, Phi, E: Int64;
+Begin
+    MemLog.Clear;
+
+    If Not TryStrToInt64(Trim(EdP.Text), P) Then
+    Begin
+        ShowMessage('p должно быть целым числом');
+        Exit;
+    End;
+    If Not TryStrToInt64(Trim(EdQ.Text), Q) Then
+    Begin
+        ShowMessage('q должно быть целым числом');
+        Exit;
+    End;
+    If Not TryStrToInt64(Trim(EdD.Text), D) Then
+    Begin
+        ShowMessage('d должно быть целым числом');
+        Exit;
+    End;
+
+    If Not IsPrime(P) Then
+    Begin
+        ShowMessage('p = ' + IntToStr(P) + ' не является простым!');
+        Exit;
+    End;
+    If Not IsPrime(Q) Then
+    Begin
+        ShowMessage('q = ' + IntToStr(Q) + ' не является простым!');
+        Exit;
+    End;
+    If P = Q Then
+    Begin
+        ShowMessage('p и q должны быть разными');
+        Exit;
+    End;
+    If D < 1 Then
+    Begin
+        ShowMessage('d должно быть >= 1');
+        Exit;
+    End;
+
+    N := P * Q;
+    Phi := (P - 1) * (Q - 1);
+
+    If GCD(D, Phi) <> 1 Then
+    Begin
+        ShowMessage('НОД(d, φ(n)) = ' + IntToStr(GCD(D, Phi)) + #13#10 + 'Ключи несовместимы: d и φ(n) должны быть взаимно простыми');
+        Exit;
+    End;
+
+    E := ModInv(D, Phi);
+
+    FP := P;
+    FQ := Q;
+    FN := N;
+    FPhi := Phi;
+    FE := E;
+    FD := D;
+
+    EdN.Text := IntToStr(N);
+    EdPhi.Text := IntToStr(Phi);
+    EdE.Text := IntToStr(E);
+
+    EdVN.Text := IntToStr(N);
+    EdVE.Text := IntToStr(E);
+
+    MemLog.Lines.Add('p = ' + IntToStr(P));
+    MemLog.Lines.Add('q = ' + IntToStr(Q));
+    MemLog.Lines.Add('n = p*q = ' + IntToStr(N));
+    MemLog.Lines.Add('φ(n) = (p-1)*(q-1) = ' + IntToStr(Phi));
+    MemLog.Lines.Add('e = d^(-1) mod φ(n) = ' + IntToStr(E));
+    MemLog.Lines.Add('Проверка: e*d mod φ(n) = ' + IntToStr((E * D) Mod Phi));
+    MemLog.Lines.Add('Открытый ключ Ko = (e=' + IntToStr(E) + ', n=' + IntToStr(N) + ')');
+    MemLog.Lines.Add('Закрытый ключ Kc = (d=' + IntToStr(D) + ', n=' + IntToStr(N) + ')');
+End;
+
+Procedure TForm1.BtnSignClick(Sender: TObject);
+Var
+    Msg: String;
+    H, S: Int64;
+    Sl: TStringList;
+Begin
+    MemLog.Clear;
+    If FN = 0 Then
+    Begin
+        ShowMessage('Сначала вычислите ключи!');
+        Exit;
+    End;
+
+    If Not FileExists(Trim(EdMsg.Text)) Then
+    Begin
+        ShowMessage('Файл не найден! Выберите файл для подписи.');
+        Exit;
+    End;
+
+    Sl := TStringList.Create;
+    Try
+        Sl.LoadFromFile(Trim(EdMsg.Text), TEncoding.UTF8);
+        Msg := Sl.Text;
+    Finally
+        Sl.Free;
+    End;
+
+    Msg := Trim(Msg);
+
+    H := CalcHash(Msg, FN);
+    S := PowMod(H, FD, FN);
+
+    EdHash.Text := IntToStr(H);
+    EdSig.Text := IntToStr(S);
+
+    MemLog.Lines.Add('Файл: ' + Trim(EdMsg.Text));
+    MemLog.Lines.Add('Сообщение: ' + Msg);
+    MemLog.Lines.Add('H0 = 100');
+    MemLog.Lines.Add('Хеш h(M) = ' + IntToStr(H));
+    MemLog.Lines.Add('S = h(M)^d mod n');
+    MemLog.Lines.Add('S = ' + IntToStr(H) + '^' + IntToStr(FD) + ' mod ' + IntToStr(FN));
+    MemLog.Lines.Add('S = ' + IntToStr(S));
+End;
+
+Procedure TForm1.BtnSaveClick(Sender: TObject);
+Var
+    Sl: TStringList;
+    MsgSl: TStringList;
+Begin
+    If EdSig.Text = '' Then
+    Begin
+        ShowMessage('Сначала подпишите сообщение!');
+        Exit;
+    End;
+
+    DlgSave.DefaultExt := 'txt';
+    DlgSave.Filter := 'Текстовые файлы (*.txt)|*.txt';
+    If Not DlgSave.Execute Then
+        Exit;
+
+    Sl := TStringList.Create;
+    MsgSl := TStringList.Create;
+    Try
+        If FileExists(Trim(EdMsg.Text)) Then
+        Begin
+            MsgSl.LoadFromFile(Trim(EdMsg.Text), TEncoding.UTF8);
+            Sl.AddStrings(MsgSl);
+        End;
+
+        Sl.Add(EdSig.Text);
+        Sl.SaveToFile(DlgSave.FileName, TEncoding.UTF8);
+        ShowMessage('Файл сохранён: ' + DlgSave.FileName);
+    Finally
+        Sl.Free;
+        MsgSl.Free;
+    End;
+End;
+
+Procedure TForm1.BtnOpenClick(Sender: TObject);
+Begin
+    DlgOpen.Filter := 'Текстовые файлы (*.txt)|*.txt|Все файлы|*.*';
+    If DlgOpen.Execute Then
+        EdFile.Text := DlgOpen.FileName;
+End;
+
+Procedure TForm1.BtnVerifyClick(Sender: TObject);
+Var
+    Sl: TStringList;
+    I: Integer;
+    S, N, E, H1, H2: Int64;
+    MsgText: String;
+Begin
+    MemVLog.Clear;
+    EdVText.Text := '';
+    EdVS.Text := '';
+    EdH1.Text := '';
+    EdH2.Text := '';
+    EdResult.Text := '';
+    EdResult.Color := ClWindow;
+
+    If Not TryStrToInt64(Trim(EdVN.Text), N) Or (N < 4) Then
+    Begin
+        ShowMessage('Введите корректное n');
+        Exit;
+    End;
+
+    If Not TryStrToInt64(Trim(EdVE.Text), E) Or (E < 2) Then
+    Begin
+        ShowMessage('Введите корректное e');
+        Exit;
+    End;
+
+    If Not FileExists(EdFile.Text) Then
+    Begin
+        ShowMessage('Файл не найден!');
+        Exit;
+    End;
+
+    Sl := TStringList.Create;
+    Try
+        Sl.LoadFromFile(EdFile.Text, TEncoding.UTF8);
+
+        If Sl.Count < 1 Then
+        Begin
+            ShowMessage('Файл пуст!');
+            Exit;
+        End;
+
+        If Not TryStrToInt64(Trim(Sl[Sl.Count - 1]), S) Then
+        Begin
+            ShowMessage('Подпись не является числом!');
+            Exit;
+        End;
+
+        MsgText := '';
+
+        If Sl.Count > 1 Then
+        Begin
+            For I := 0 To Sl.Count - 2 Do
+            Begin
+                If MsgText = '' Then
+                    MsgText := Sl[I]
+                Else
+                    MsgText := MsgText + #13#10 + Sl[I];
+            End;
+        End;
+
+        MsgText := Trim(MsgText);
+
+        EdVText.Text := MsgText;
+        EdVS.Text := IntToStr(S);
+
+        H1 := PowMod(S, E, N);
+        H2 := CalcHash(MsgText, N);
+
+        EdH1.Text := IntToStr(H1);
+        EdH2.Text := IntToStr(H2);
+
+        MemVLog.Lines.Add('Файл: ' + EdFile.Text);
+        MemVLog.Lines.Add('n = ' + IntToStr(N) + ', e = ' + IntToStr(E));
+        MemVLog.Lines.Add('Подпись S = ' + IntToStr(S));
+        MemVLog.Lines.Add('Хеш из подписи: ' + IntToStr(H1));
+        MemVLog.Lines.Add('Хеш из текста: ' + IntToStr(H2));
+
+        If H1 = H2 Then
+        Begin
+            EdResult.Text := 'ПОДПИСЬ ВЕРНА';
+            EdResult.Color := $0099FF99;
+            MemVLog.Lines.Add('РЕЗУЛЬТАТ: ВЕРНА');
+        End
+        Else
+        Begin
+            EdResult.Text := 'ПОДПИСЬ НЕВЕРНА';
+            EdResult.Color := $009999FF;
+            MemVLog.Lines.Add('РЕЗУЛЬТАТ: НЕВЕРНА');
+        End;
+
+    Finally
+        Sl.Free;
+    End;
+End;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+    DlgOpen.Filter := 'Текстовые файлы (*.txt)|*.txt|Все файлы|*.*';
+    If DlgOpen.Execute Then
+        EdMsg.Text := DlgOpen.FileName;
+end;
+
+End.

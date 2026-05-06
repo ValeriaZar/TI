@@ -1,0 +1,306 @@
+object Form1: TForm1
+  Left = 200
+  Top = 100
+  Width = 640
+  Height = 740
+  Caption = 'ЭЦП RSA'
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OnCreate = FormCreate
+  object PageControl1: TPageControl
+    Left = 8
+    Top = 8
+    Width = 614
+    Height = 694
+    ActivePage = TabSheet1
+    object TabSheet1: TTabSheet
+      Caption = 'Подписание'
+      object lbP: TLabel
+        Left = 8
+        Top = 12
+        Caption = 'p (простое):'
+      end
+      object edP: TEdit
+        Left = 160
+        Top = 8
+        Width = 100
+        Height = 24
+        Text = '17'
+      end
+      object lbQ: TLabel
+        Left = 8
+        Top = 44
+        Caption = 'q (простое):'
+      end
+      object edQ: TEdit
+        Left = 160
+        Top = 40
+        Width = 100
+        Height = 24
+        Text = '19'
+      end
+      object lbD: TLabel
+        Left = 8
+        Top = 76
+        Caption = 'Закрытый ключ d:'
+      end
+      object edD: TEdit
+        Left = 160
+        Top = 72
+        Width = 100
+        Height = 24
+        Text = '67'
+      end
+      object btnKeys: TButton
+        Left = 8
+        Top = 108
+        Width = 252
+        Height = 28
+        Caption = 'Вычислить ключи'
+        OnClick = btnKeysClick
+      end
+      object lbN: TLabel
+        Left = 8
+        Top = 152
+        Caption = 'n = p*q:'
+      end
+      object edN: TEdit
+        Left = 160
+        Top = 148
+        Width = 200
+        Height = 24
+        ReadOnly = True
+      end
+      object lbPhi: TLabel
+        Left = 8
+        Top = 184
+        Caption = 'φ(n) = (p-1)*(q-1):'
+      end
+      object edPhi: TEdit
+        Left = 160
+        Top = 180
+        Width = 200
+        Height = 24
+        ReadOnly = True
+      end
+      object lbE: TLabel
+        Left = 8
+        Top = 216
+        Caption = 'Открытый ключ e:'
+      end
+      object edE: TEdit
+        Left = 160
+        Top = 212
+        Width = 200
+        Height = 24
+        ReadOnly = True
+      end
+      object lbMsg: TLabel
+        Left = 8
+        Top = 260
+        Caption = 'Сообщение:'
+      end
+      object edMsg: TEdit
+        Left = 160
+        Top = 256
+        Width = 430
+        Height = 24
+        Text = 'БГУИР'
+      end
+      object btnSign: TButton
+        Left = 8
+        Top = 296
+        Width = 252
+        Height = 28
+        Caption = 'Подписать'
+        OnClick = btnSignClick
+      end
+      object lbHash: TLabel
+        Left = 8
+        Top = 340
+        Caption = 'Хеш h(M) (десятичное):'
+      end
+      object edHash: TEdit
+        Left = 200
+        Top = 336
+        Width = 200
+        Height = 24
+        ReadOnly = True
+      end
+      object lbSig: TLabel
+        Left = 8
+        Top = 372
+        Caption = 'ЭЦП S (десятичное):'
+      end
+      object edSig: TEdit
+        Left = 200
+        Top = 368
+        Width = 200
+        Height = 24
+        ReadOnly = True
+      end
+      object btnSave: TButton
+        Left = 420
+        Top = 360
+        Width = 170
+        Height = 36
+        Caption = 'Сохранить файл'
+        OnClick = btnSaveClick
+      end
+      object lbLog: TLabel
+        Left = 8
+        Top = 412
+        Caption = 'Лог:'
+      end
+      object memLog: TMemo
+        Left = 8
+        Top = 430
+        Width = 582
+        Height = 216
+        ReadOnly = True
+        ScrollBars = ssBoth
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Проверка ЭЦП'
+      object lbFile: TLabel
+        Left = 8
+        Top = 12
+        Caption = 'Файл:'
+      end
+      object edFile: TEdit
+        Left = 60
+        Top = 8
+        Width = 420
+        Height = 24
+      end
+      object btnOpen: TButton
+        Left = 490
+        Top = 6
+        Width = 100
+        Height = 28
+        Caption = 'Обзор...'
+        OnClick = btnOpenClick
+      end
+      object lbVN: TLabel
+        Left = 8
+        Top = 48
+        Caption = 'n:'
+      end
+      object edVN: TEdit
+        Left = 60
+        Top = 44
+        Width = 200
+        Height = 24
+      end
+      object lbVE: TLabel
+        Left = 8
+        Top = 80
+        Caption = 'e (открытый):'
+      end
+      object edVE: TEdit
+        Left = 160
+        Top = 76
+        Width = 200
+        Height = 24
+      end
+      object btnVerify: TButton
+        Left = 8
+        Top = 116
+        Width = 582
+        Height = 32
+        Caption = 'Проверить ЭЦП'
+        Font.Style = [fsBold]
+        ParentFont = False
+        OnClick = btnVerifyClick
+      end
+      object lbVText: TLabel
+        Left = 8
+        Top = 162
+        Caption = 'Текст из файла:'
+      end
+      object edVText: TEdit
+        Left = 160
+        Top = 158
+        Width = 430
+        Height = 24
+        ReadOnly = True
+      end
+      object lbVS: TLabel
+        Left = 8
+        Top = 196
+        Caption = 'Подпись S:'
+      end
+      object edVS: TEdit
+        Left = 160
+        Top = 192
+        Width = 430
+        Height = 24
+        ReadOnly = True
+      end
+      object lbH1: TLabel
+        Left = 8
+        Top = 230
+        Caption = 'S^e mod n (хеш из подписи):'
+      end
+      object edH1: TEdit
+        Left = 230
+        Top = 226
+        Width = 200
+        Height = 24
+        ReadOnly = True
+      end
+      object lbH2: TLabel
+        Left = 8
+        Top = 264
+        Caption = 'h(M) вычисленный:'
+      end
+      object edH2: TEdit
+        Left = 230
+        Top = 260
+        Width = 200
+        Height = 24
+        ReadOnly = True
+      end
+      object lbResult: TLabel
+        Left = 8
+        Top = 300
+        Caption = 'Результат:'
+      end
+      object edResult: TEdit
+        Left = 100
+        Top = 296
+        Width = 330
+        Height = 30
+        Font.Style = [fsBold]
+        ParentFont = False
+        ReadOnly = True
+      end
+      object lbVLog: TLabel
+        Left = 8
+        Top = 342
+        Caption = 'Лог:'
+      end
+      object memVLog: TMemo
+        Left = 8
+        Top = 360
+        Width = 582
+        Height = 284
+        ReadOnly = True
+        ScrollBars = ssBoth
+      end
+    end
+  end
+  object dlgSave: TSaveDialog
+    Left = 560
+    Top = 8
+  end
+  object dlgOpen: TOpenDialog
+    Left = 560
+    Top = 44
+  end
+end

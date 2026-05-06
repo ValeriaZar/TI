@@ -1,0 +1,567 @@
+object Form1: TForm1
+  Left = 200
+  Top = 100
+  Margins.Left = 6
+  Margins.Top = 6
+  Margins.Right = 6
+  Margins.Bottom = 6
+  Caption = #208#173#208#166#208#376' RSA'
+  ClientHeight = 1338
+  ClientWidth = 1228
+  Color = clBtnFace
+  Font.Charset = RUSSIAN_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -26
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OnCreate = FormCreate
+  PixelsPerInch = 192
+  TextHeight = 31
+  object PageControl: TPageControl
+    Left = 16
+    Top = 16
+    Width = 1228
+    Height = 1388
+    Margins.Left = 6
+    Margins.Top = 6
+    Margins.Right = 6
+    Margins.Bottom = 6
+    ActivePage = TabSheet1
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      Caption = #208#376#208#190#208#180#208#191#208#184#209#129#208#176#208#189#208#184#208#181
+      object lbP: TLabel
+        Left = 16
+        Top = 24
+        Width = 272
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = 'p ('#208#191#209#8364#208#190#209#129#209#8218#208#190#208#181'):'
+      end
+      object lbQ: TLabel
+        Left = 16
+        Top = 88
+        Width = 272
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = 'q ('#208#191#209#8364#208#190#209#129#209#8218#208#190#208#181'):'
+      end
+      object lbD: TLabel
+        Left = 16
+        Top = 152
+        Width = 407
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#8212#208#176#208#186#209#8364#209#8249#209#8218#209#8249#208#185' '#208#186#208#187#209#381#209#8225' d:'
+      end
+      object lbN: TLabel
+        Left = 16
+        Top = 304
+        Width = 101
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = 'n = p*q:'
+      end
+      object lbPhi: TLabel
+        Left = 16
+        Top = 368
+        Width = 231
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #207#8224'(n) = (p-1)*(q-1):'
+      end
+      object lbE: TLabel
+        Left = 16
+        Top = 432
+        Width = 387
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#382#209#8218#208#186#209#8364#209#8249#209#8218#209#8249#208#185' '#208#186#208#187#209#381#209#8225' e:'
+      end
+      object lbMsg: TLabel
+        Left = 16
+        Top = 520
+        Width = 356
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#161#208#190#208#190#208#177#209#8240#208#181#208#189#208#184#208#181':'
+      end
+      object lbHash: TLabel
+        Left = 16
+        Top = 680
+        Width = 501
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#165#208#181#209#710' h(M) ('#208#180#208#181#209#129#209#143#209#8218#208#184#209#8225#208#189#208#190#208#181'):'
+      end
+      object lbSig: TLabel
+        Left = 16
+        Top = 744
+        Width = 452
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#173#208#166#208#376' S ('#208#180#208#181#209#129#209#143#209#8218#208#184#209#8225#208#189#208#190#208#181'):'
+      end
+      object lbLog: TLabel
+        Left = 16
+        Top = 824
+        Width = 112
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#8250#208#190#208#179':'
+      end
+      object edP: TEdit
+        Left = 320
+        Top = 16
+        Width = 200
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        TabOrder = 0
+        Text = '17'
+      end
+      object edQ: TEdit
+        Left = 320
+        Top = 80
+        Width = 200
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        TabOrder = 1
+        Text = '19'
+      end
+      object edD: TEdit
+        Left = 320
+        Top = 144
+        Width = 200
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        TabOrder = 2
+        Text = '67'
+      end
+      object btnKeys: TButton
+        Left = 16
+        Top = 216
+        Width = 504
+        Height = 56
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#8217#209#8249#209#8225#208#184#209#129#208#187#208#184#209#8218#209#338' '#208#186#208#187#209#381#209#8225#208#184
+        TabOrder = 3
+        OnClick = btnKeysClick
+      end
+      object edN: TEdit
+        Left = 320
+        Top = 296
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 4
+      end
+      object edPhi: TEdit
+        Left = 320
+        Top = 360
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 5
+      end
+      object edE: TEdit
+        Left = 320
+        Top = 424
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 6
+      end
+      object edMsg: TEdit
+        Left = 320
+        Top = 512
+        Width = 860
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        TabOrder = 7
+        Text = #208#8216#208#8220#208#163#208#732#208#160
+      end
+      object btnSign: TButton
+        Left = 16
+        Top = 592
+        Width = 504
+        Height = 56
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#376#208#190#208#180#208#191#208#184#209#129#208#176#209#8218#209#338
+        TabOrder = 8
+        OnClick = btnSignClick
+      end
+      object edHash: TEdit
+        Left = 400
+        Top = 672
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 9
+      end
+      object edSig: TEdit
+        Left = 400
+        Top = 736
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 10
+      end
+      object btnSave: TButton
+        Left = 840
+        Top = 720
+        Width = 340
+        Height = 72
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#161#208#190#209#8230#209#8364#208#176#208#189#208#184#209#8218#209#338' '#209#8222#208#176#208#185#208#187
+        TabOrder = 11
+        OnClick = btnSaveClick
+      end
+      object memLog: TMemo
+        Left = 16
+        Top = 860
+        Width = 1164
+        Height = 432
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 12
+      end
+    end
+    object TabSheet2: TTabSheet
+      Margins.Left = 6
+      Margins.Top = 6
+      Margins.Right = 6
+      Margins.Bottom = 6
+      Caption = #208#376#209#8364#208#190#208#178#208#181#209#8364#208#186#208#176' '#208#173#208#166#208#376
+      object lbFile: TLabel
+        Left = 16
+        Top = 24
+        Width = 135
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#164#208#176#208#185#208#187':'
+      end
+      object lbVN: TLabel
+        Left = 16
+        Top = 96
+        Width = 24
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = 'n:'
+      end
+      object lbVE: TLabel
+        Left = 16
+        Top = 160
+        Width = 286
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = 'e ('#208#190#209#8218#208#186#209#8364#209#8249#209#8218#209#8249#208#185'):'
+      end
+      object lbVText: TLabel
+        Left = 16
+        Top = 324
+        Width = 370
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#162#208#181#208#186#209#129#209#8218' '#208#184#208#183' '#209#8222#208#176#208#185#208#187#208#176':'
+      end
+      object lbVS: TLabel
+        Left = 16
+        Top = 392
+        Width = 261
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#376#208#190#208#180#208#191#208#184#209#129#209#338' S:'
+      end
+      object lbH1: TLabel
+        Left = 16
+        Top = 460
+        Width = 559
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = 'S^e mod n ('#209#8230#208#181#209#710' '#208#184#208#183' '#208#191#208#190#208#180#208#191#208#184#209#129#208#184'):'
+      end
+      object lbH2: TLabel
+        Left = 16
+        Top = 528
+        Width = 422
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = 'h(M) '#208#178#209#8249#209#8225#208#184#209#129#208#187#208#181#208#189#208#189#209#8249#208#185':'
+      end
+      object lbResult: TLabel
+        Left = 16
+        Top = 600
+        Width = 275
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#160#208#181#208#183#209#402#208#187#209#338#209#8218#208#176#209#8218':'
+      end
+      object lbVLog: TLabel
+        Left = 16
+        Top = 684
+        Width = 112
+        Height = 31
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#8250#208#190#208#179':'
+      end
+      object edFile: TEdit
+        Left = 120
+        Top = 16
+        Width = 840
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        TabOrder = 0
+      end
+      object btnOpen: TButton
+        Left = 980
+        Top = 12
+        Width = 200
+        Height = 56
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#382#208#177#208#183#208#190#209#8364'...'
+        TabOrder = 1
+        OnClick = btnOpenClick
+      end
+      object edVN: TEdit
+        Left = 120
+        Top = 88
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        TabOrder = 2
+      end
+      object edVE: TEdit
+        Left = 320
+        Top = 152
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        TabOrder = 3
+      end
+      object btnVerify: TButton
+        Left = 16
+        Top = 232
+        Width = 1164
+        Height = 64
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Caption = #208#376#209#8364#208#190#208#178#208#181#209#8364#208#184#209#8218#209#338' '#208#173#208#166#208#376
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -26
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 4
+        OnClick = btnVerifyClick
+      end
+      object edVText: TEdit
+        Left = 320
+        Top = 316
+        Width = 860
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 5
+      end
+      object edVS: TEdit
+        Left = 320
+        Top = 384
+        Width = 860
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 6
+      end
+      object edH1: TEdit
+        Left = 460
+        Top = 452
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 7
+      end
+      object edH2: TEdit
+        Left = 460
+        Top = 520
+        Width = 400
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        TabOrder = 8
+      end
+      object edResult: TEdit
+        Left = 200
+        Top = 592
+        Width = 660
+        Height = 39
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -26
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 9
+      end
+      object memVLog: TMemo
+        Left = 16
+        Top = 720
+        Width = 1164
+        Height = 568
+        Margins.Left = 6
+        Margins.Top = 6
+        Margins.Right = 6
+        Margins.Bottom = 6
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 10
+      end
+    end
+  end
+  object dlgSave: TSaveDialog
+    Left = 560
+    Top = 8
+  end
+  object dlgOpen: TOpenDialog
+    Left = 560
+    Top = 44
+  end
+end
